@@ -54,9 +54,9 @@ def load_data(data_set_name):
         relative_path = '../../data/data_set_ids.csv'
         data_set = pd.read_csv(os.path.join(abs_path, relative_path))
         idx = data_set[data_set['name'] == data_set_name].index.values.astype(int)[0]
-        data_set = fetch_openml(data_id=data_set.at[idx, 'id'])
-        X = data_set.data
-        y_true = data_set.target
+        X, y_true = fetch_openml(data_id=data_set.at[idx, 'id'], return_X_y=True)
+        X = X.values
+        y_true = y_true.values
         le = LabelEncoder().fit(y_true)
         y_true = le.transform(y_true)
         y = None
@@ -75,8 +75,8 @@ def investigate_data_set(data_set_name):
 def preprocess_2d_data_set(data_set_name, res=101):
     X, y_true, y = load_data(data_set_name=data_set_name)
     X = StandardScaler().fit_transform(X)
-    x_1_vec = np.linspace(min(X[:, 0])-0.5, max(X[:, 0])+0.5, res)
-    x_2_vec = np.linspace(min(X[:, 1])-0.5, max(X[:, 1])+0.5, res)
+    x_1_vec = np.linspace(min(X[:, 0]) - 0.5, max(X[:, 0]) + 0.5, res)
+    x_2_vec = np.linspace(min(X[:, 1]) - 0.5, max(X[:, 1]) + 0.5, res)
     X_1_mesh, X_2_mesh = np.meshgrid(x_1_vec, x_2_vec)
     mesh_instances = np.array([X_1_mesh.reshape(-1), X_2_mesh.reshape(-1)]).T
     n_samples = len(X)
@@ -101,6 +101,7 @@ class Mixture:
     classes: array-like, shape=[n_distributions]
         Class label of each distribution.
     """
+
     def __init__(self, priors, base_dists, classes=None):
         self.priors = priors
         self.base_dists = base_dists

@@ -14,7 +14,6 @@ kc2,1063
 parkinsons,1488
 banknote,1462
 seeds,1499
-prnn-craps,446
 chscase-vine,814
 wine,187
 iris,61
@@ -25,3 +24,5 @@ steel-plates-fault,1504
 phoneme,1489
 satimage,182
 wind,847
+run-or-walk,40922
+eeg-eye-state,1471
